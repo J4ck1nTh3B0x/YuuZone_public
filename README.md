@@ -8,7 +8,6 @@ Public source code for YuuZone web
 - **Python 3.8+**
 - **Node.js v16+**
 - **npm v7+**
-- Optional: **Gunicorn** (auto-installed by the script on supported platforms)
 
 ---
 
