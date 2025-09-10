@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="icon" type="image/png" href="src/assets/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YuuZone</title>
+
+    <!-- Passive Event Listener Polyfill - Must run before any other scripts -->
+    <script>
+      (function() {
+        'use strict';
+
+        // Check if passive event listeners are supported
+        let supportsPassive = false;
+
+        try {
+          const opts = Object.defineProperty({}, 'passive', {
+            get: function() {
+              supportsPassive = true;
+              return true;
+            }
+          });
+          window.addEventListener('testPassive', null, opts);
+          window.removeEventListener('testPassive', null, opts);
+        } catch (e) {
+          // Passive not supported
+        }
+
+        if (!supportsPassive) {
+          return; // Exit if passive events aren't supported
+        }
+
+        // Store original methods
+        const originalAddEventListener = EventTarget.prototype.addEventListener;
+        const originalRemoveEventListener = EventTarget.prototype.removeEventListener;
+
+        // Touch events that should be passive by default
+        const touchEvents = ['touchstart', 'touchmove', 'touchend', 'touchcancel'];
+
+        // Override addEventListener
+        EventTarget.prototype.addEventListener = function(type, listener, optionsOrCapture) {
+          let options = optionsOrCapture;
+
+          // Convert boolean capture to options object
+          if (typeof options === 'boolean') {
+            options = { capture: options };
+          } else if (!options) {
+            options = {};
+          } else if (typeof options !== 'object') {
+            options = {};
+          }
+
+          // Make touch events passive by default unless explicitly set to false
+          if (touchEvents.includes(type) && options.passive !== false) {
+            options = { ...options, passive: true };
+          }
+
+          return originalAddEventListener.call(this, type, listener, options);
+        };
+
+        // Override removeEventListener to maintain compatibility
+        EventTarget.prototype.removeEventListener = function(type, listener, optionsOrCapture) {
+          let options = optionsOrCapture;
+
+          // Convert boolean capture to options object for consistency
+          if (typeof options === 'boolean') {
+            options = { capture: options };
+          }
+
+          return originalRemoveEventListener.call(this, type, listener, options);
+        };
+
+        // Add a flag to indicate the polyfill is active
+        window.__passiveEventPolyfillActive = true;
+
+        // Log that the polyfill is active
+        // Note: This console log will be translated when i18n is loaded
+        console.log('Passive event listener polyfill active (inline)');
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <img id="custom-loader" src="/src/assets/loading.gif" alt="Loading..." style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);" />
+    <link rel="admin_ICON" type="image/svg+xml" href="src/assets/crown-admin.svg" />
+    <link rel="mod_ICON" type="image/svg+xml" href="src/assets/wrench-mod.svg" />
+    <link rel="check_managed_ICON" type="image/svg+xml" href="src/assets/check_managed_subthread.svg" />
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

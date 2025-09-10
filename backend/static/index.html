@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="icon" type="image/png" href="/assets/favicon-4AMzo_V1.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YuuZone</title>
+
+    <!-- Passive Event Listener Polyfill - Must run before any other scripts -->
+    <script>
+      (function() {
+        'use strict';
+
+        // Check if passive event listeners are supported
+        let supportsPassive = false;
+
+        try {
+          const opts = Object.defineProperty({}, 'passive', {
+            get: function() {
+              supportsPassive = true;
+              return true;
+            }
+          });
+          window.addEventListener('testPassive', null, opts);
+          window.removeEventListener('testPassive', null, opts);
+        } catch (e) {
+          // Passive not supported
+        }
+
+        if (!supportsPassive) {
+          return; // Exit if passive events aren't supported
+        }
+
+        // Store original methods
+        const originalAddEventListener = EventTarget.prototype.addEventListener;
+        const originalRemoveEventListener = EventTarget.prototype.removeEventListener;
+
+        // Touch events that should be passive by default
+        const touchEvents = ['touchstart', 'touchmove', 'touchend', 'touchcancel'];
+
+        // Override addEventListener
+        EventTarget.prototype.addEventListener = function(type, listener, optionsOrCapture) {
+          let options = optionsOrCapture;
+
+          // Convert boolean capture to options object
+          if (typeof options === 'boolean') {
+            options = { capture: options };
+          } else if (!options) {
+            options = {};
+          } else if (typeof options !== 'object') {
+            options = {};
+          }
+
+          // Make touch events passive by default unless explicitly set to false
+          if (touchEvents.includes(type) && options.passive !== false) {
+            options = { ...options, passive: true };
+          }
+
+          return originalAddEventListener.call(this, type, listener, options);
+        };
+
+        // Override removeEventListener to maintain compatibility
+        EventTarget.prototype.removeEventListener = function(type, listener, optionsOrCapture) {
+          let options = optionsOrCapture;
+
+          // Convert boolean capture to options object for consistency
+          if (typeof options === 'boolean') {
+            options = { capture: options };
+          }
+
+          return originalRemoveEventListener.call(this, type, listener, options);
+        };
+
+        // Add a flag to indicate the polyfill is active
+        window.__passiveEventPolyfillActive = true;
+
+        // Log that the polyfill is active
+        // Note: This console log will be translated when i18n is loaded
+        console.log('Passive event listener polyfill active (inline)');
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-B4WczAw1.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/vendor_axios-NIGUFBhG.js">
+    <link rel="modulepreload" crossorigin href="/assets/vendor_other-CYhXLBgr.js">
+    <link rel="modulepreload" crossorigin href="/assets/vendor_socket_io_client-BJzX-5m1.js">
+    <link rel="modulepreload" crossorigin href="/assets/vendor_react_core-BQ601SDD.js">
+    <link rel="stylesheet" crossorigin href="/assets/vendor_react_core-CLk5Z9DE.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-C4OXQFlI.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <img id="custom-loader" src="/assets/loading-CFeN816B.gif" alt="Loading..." style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);" />
+    <link rel="admin_ICON" type="image/svg+xml" href="data:image/svg+xml,%3c?xml%20version='1.0'%20encoding='utf-8'?%3e%3c!--%20Uploaded%20to:%20SVG%20Repo,%20www.svgrepo.com,%20Generator:%20SVG%20Repo%20Mixer%20Tools%20--%3e%3csvg%20width='800px'%20height='800px'%20viewBox='0%200%2024%2024'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M4%2019H20M11.2929%205.70711L8.70711%208.2929C8.31658%208.68342%207.68342%208.68342%207.29289%208.2929L5.70711%206.70711C5.07714%206.07714%204%206.52331%204%207.41422V15C4%2015.5523%204.44772%2016%205%2016H19C19.5523%2016%2020%2015.5523%2020%2015V7.41421C20%206.52331%2018.9229%206.07714%2018.2929%206.70711L16.7071%208.2929C16.3166%208.68342%2015.6834%208.68342%2015.2929%208.2929L12.7071%205.70711C12.3166%205.31658%2011.6834%205.31658%2011.2929%205.70711Z'%20stroke='%23000000'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e" />
+    <link rel="mod_ICON" type="image/svg+xml" href="data:image/svg+xml,%3c?xml%20version='1.0'%20encoding='utf-8'?%3e%3c!--%20Uploaded%20to:%20SVG%20Repo,%20www.svgrepo.com,%20Generator:%20SVG%20Repo%20Mixer%20Tools%20--%3e%3csvg%20width='800px'%20height='800px'%20viewBox='0%200%2024%2024'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M4.87171%201.58811C4.18324%201.9184%204.34293%202.75714%204.79289%203.20711L9.08579%207.5L7.5%209.08579L3.20711%204.79289C2.75711%204.3429%201.90944%204.19971%201.58419%204.87995C0.985604%206.1319%200.769329%207.54124%200.975579%208.9287C1.23113%2010.6478%202.11708%2012.2104%203.46105%2013.3124C4.80502%2014.4144%206.51089%2014.977%208.24676%2014.8908C8.89048%2014.8588%209.52124%2014.7385%2010.1228%2014.537L17.8787%2022.2929C19.0503%2023.4645%2020.9497%2023.4645%2022.1213%2022.2929L22.2929%2022.1213C23.4645%2020.9497%2023.4645%2019.0503%2022.2929%2017.8787L14.537%2010.1228C14.7395%209.51835%2014.8601%208.8844%2014.8913%208.2375C14.9753%206.50151%2014.4104%204.79638%2013.3066%203.45387C12.2028%202.11135%2010.6391%201.22746%208.91964%200.974169C7.53192%200.769745%206.12286%200.987876%204.87171%201.58811ZM12.0945%2010.5087C12.5356%209.7995%2012.793%208.98448%2012.834%208.13802C12.8932%206.91285%2012.4946%205.70946%2011.7156%204.76198C10.9366%203.8145%209.83297%203.19069%208.61946%203.01193C8.21216%202.95193%207.80225%202.94351%207.39883%202.98462L10.5%206.08579C11.2811%206.86684%2011.281%208.13317%2010.5%208.91421L8.91421%2010.5C8.13317%2011.281%206.86684%2011.281%206.08579%2010.5L2.98467%207.39888C2.94336%207.8044%202.95209%208.21647%203.01295%208.62584C3.1933%209.8391%203.81856%2010.9419%204.76707%2011.7196C5.71557%2012.4974%206.91949%2012.8944%208.14458%2012.8336C8.98967%2012.7916%209.80314%2012.5338%2010.511%2012.093L11.9946%2013.5766L11.9924%2013.5782L19.2929%2020.8787C19.6834%2021.2692%2020.3166%2021.2692%2020.7071%2020.8787L20.8787%2020.7071C21.2692%2020.3166%2021.2692%2019.6834%2020.8787%2019.2929L12.0945%2010.5087Z'%20fill='%230F0F0F'/%3e%3c/svg%3e" />
+    <link rel="check_managed_ICON" type="image/svg+xml" href="data:image/svg+xml,%3c?xml%20version='1.0'%20?%3e%3c!--%20Uploaded%20to:%20SVG%20Repo,%20www.svgrepo.com,%20Generator:%20SVG%20Repo%20Mixer%20Tools%20--%3e%3csvg%20width='800px'%20height='800px'%20viewBox='0%200%20512%20512'%20id='svg2793'%20style='fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;'%20version='1.1'%20xml:space='preserve'%20xmlns='http://www.w3.org/2000/svg'%20xmlns:cc='http://creativecommons.org/ns%23'%20xmlns:dc='http://purl.org/dc/elements/1.1/'%20xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns%23'%20xmlns:serif='http://www.serif.com/'%20xmlns:svg='http://www.w3.org/2000/svg'%3e%3cdefs%20id='defs2797'/%3e%3cg%20id='_24-Connect'%20style='display:inline'%20transform='translate(-3072,-4096)'%3e%3cg%20id='g2211'%20transform='translate(3339.32,4267.43)'%3e%3cpath%20d='m%200,169.14%20c%20-44.818,0%20-81.28,-36.462%20-81.28,-81.28%200,-44.818%2036.462,-81.28%2081.28,-81.28%2044.817,0%2081.279,36.462%2081.279,81.28%200,44.818%20-36.462,81.28%20-81.279,81.28%20m%20-149.2,141.43%20c%20-24.587,0%20-44.59,-20.003%20-44.59,-44.59%200,-24.587%2020.003,-44.59%2044.59,-44.59%2024.587,0%2044.59,20.003%2044.59,44.59%200,24.587%20-20.003,44.59%20-44.59,44.59%20m%20-83.91,-398.5%20c%200,-29.5%2024,-53.5%2053.5,-53.5%2029.494,0%2053.49,24%2053.49,53.5%200,29.494%20-23.996,53.49%20-53.49,53.49%20-29.5,0%20-53.5,-23.996%20-53.5,-53.49%20m%20412.099,37%20c%2017.364,0%2031.49,14.126%2031.49,31.49%200,17.369%20-14.126,31.5%20-31.49,31.5%20-17.369,0%20-31.5,-14.131%20-31.5,-31.5%200,-17.364%2014.131,-31.49%2031.5,-31.49%20m%20-44.46,73.915%20c%2011.207,11.739%2026.989,19.075%2044.46,19.075%2033.907,0%2061.49,-27.589%2061.49,-61.5%200,-33.906%20-27.583,-61.49%20-61.49,-61.49%20-33.911,0%20-61.5,27.584%20-61.5,61.49%200,5.628%200.776,11.076%202.198,16.259%20L%2087.091,18.672%20C%2066.687,-6.959%2035.231,-23.42%200,-23.42%20c%20-26.243,0%20-50.388,9.137%20-69.436,24.388%20l%20-44.024,-38.046%20c%2010.859,-14.093%2017.34,-31.725%2017.34,-50.852%200,-46.042%20-37.453,-83.5%20-83.49,-83.5%20-46.042,0%20-83.5,37.458%20-83.5,83.5%200,46.036%2037.458,83.49%2083.5,83.49%2016.012,0%2030.98,-4.54%2043.702,-12.388%20l%2045.751,39.538%20c%20-13.281,18.326%20-21.123,40.838%20-21.123,65.15%200,27.971%2010.377,53.562%2027.478,73.133%20l%20-30.6,39.04%20c%20-10.397,-5.508%20-22.236,-8.643%20-34.798,-8.643%20-41.129,0%20-74.59,33.461%20-74.59,74.59%200,41.129%2033.461,74.59%2074.59,74.59%2041.129,0%2074.59,-33.461%2074.59,-74.59%200,-17.745%20-6.24,-34.055%20-16.625,-46.873%20l%2030.054,-38.343%20c%2017.567,11.607%2038.596,18.376%2061.181,18.376%2061.359,0%20111.279,-49.92%20111.279,-111.28%200,-15.382%20-3.138,-30.045%20-8.806,-43.383%20z'%20id='path2209'%20style='fill-rule:nonzero'/%3e%3c/g%3e%3cg%20id='g2215'%20transform='translate(3521.08,4502.59)'%3e%3cpath%20d='M%200,57.45%20C%20-15.842,57.45%20-28.73,44.562%20-28.73,28.72%20-28.73,12.884%20-15.842,0%200,0%2015.836,0%2028.72,12.884%2028.72,28.72%2028.72,44.562%2015.836,57.45%200,57.45%20M%200,-30%20c%20-32.384,0%20-58.73,26.342%20-58.73,58.72%200,32.384%2026.346,58.73%2058.73,58.73%2032.378,0%2058.72,-26.346%2058.72,-58.73%20C%2058.72,-3.658%2032.378,-30%200,-30'%20id='path2213'%20style='fill-rule:nonzero'/%3e%3c/g%3e%3c/g%3e%3c/svg%3e" />
+  </body>
+</html>
