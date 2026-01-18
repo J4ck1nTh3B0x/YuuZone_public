@@ -1,5 +1,19 @@
+
+This poject is done at Sep 2025 for EXE 202 subject and i aren't gonna update this code after this. Do what you want.
+Thanks Threddit for the base so i can finish the job
+---
+18 Jan 2026 Note: After a while i came back to this just to check old project and embrasing found out that i uploaded that old version of this website instead of the latest version. Goddamm my stupid life. At least the moment you see it here it should be the latest version
+
+
+I am outta here
+
+---
+
+
 # YuuZone_public
 Public source code for YuuZone web
+
+You can run it manually or run its Dockerfile. The demo is hosted on Renderer and its database is on Neon
 
 ## ⚙️ Requirements
 
